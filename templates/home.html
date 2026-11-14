@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      {% if profile.availability %}<span class="pill"><i></i>{{ profile.availability }}</span>{% endif %}
+      <h1>{{ profile.name }}</h1>
+      <p class="lead">{{ profile.headline }}</p>
+      <p class="short">{{ profile.short_bio }}</p>
+      <div class="cta">
+        <a class="btn primary" href="{% url 'project_list' %}">View projects</a>
+        <a class="btn" href="{% url 'research' %}">Research</a>
+        {% if profile.cv_file %}<a class="btn ghost" href="{{ profile.cv_file.url }}" download>Download CV ↓</a>{% endif %}
+      </div>
+    </div>
+    {% if profile.photo %}
+    <div class="hero-photo">{% picture profile.photo profile.name "(max-width: 700px) 70vw, 360px" "" True %}</div>
+    {% endif %}
+  </div>
+</section>
+
+{% if profile.interests %}
+<section class="wrap band">
+  <h2 class="sec">Research interests</h2>
+  <ul class="interest">{% for i in profile.interests %}<li>{{ i }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+
+{% if news %}
+<section class="wrap band">
+  <div class="sec-head"><h2 class="sec">Latest news</h2><a href="{% url 'news_list' %}">All news →</a></div>
+  <ul class="newslist">
+    {% for n in news %}
+    <li><time datetime="{{ n.date|date:'Y-m-d' }}">{{ n.date|date:"M Y" }}</time>
+      <div><a href="{{ n.get_absolute_url }}">{{ n.title }}</a>{% if n.pinned %} <span class="chip accent">pinned</span>{% endif %}
+      <p>{{ n.summary }}</p></div></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if projects %}
+<section class="wrap band">
+  <div class="sec-head"><h2 class="sec">Featured projects</h2><a href="{% url 'project_list' %}">All projects →</a></div>
+  <div class="grid">{% for p in projects %}{% include "partials/project_card.html" %}{% endfor %}</div>
+</section>
+{% endif %}
+
+{% if publications %}
+<section class="wrap band">
+  <div class="sec-head"><h2 class="sec">Selected research</h2><a href="{% url 'research' %}">All research →</a></div>
+  {% for pub in publications %}{% include "partials/publication.html" %}{% endfor %}
+</section>
+{% endif %}
+
+{% if reading or learning_now %}
+<section class="wrap band">
+  <div class="sec-head"><h2 class="sec">Currently learning</h2><a href="{% url 'learning' %}">Books &amp; courses →</a></div>
+  <div class="now">
+    {% for b in reading %}<div class="card now-item"><span class="chip">Book</span><strong>{{ b.title }}</strong><small>{{ b.author }}</small>
+      <div class="bar"><span style="width:{{ b.progress }}%"></span></div></div>{% endfor %}
+    {% for c in learning_now %}<div class="card now-item"><span class="chip accent">Course</span><strong>{{ c.title }}</strong><small>{{ c.provider }}</small>
+      <div class="bar"><span style="width:{{ c.progress }}%"></span></div></div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

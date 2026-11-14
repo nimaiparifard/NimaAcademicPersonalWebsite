@@ -1,0 +1,12 @@
+{% load site_extras %}
+<article class="book card">
+  <div class="book-cover">{% if b.cover %}{% picture b.cover b.title "120px" %}{% else %}<div class="cover-ph"><span>{{ b.title|slice:":1" }}</span></div>{% endif %}</div>
+  <div class="book-info">
+    <h3>{% if b.link %}<a href="{{ b.link }}" rel="noopener">{{ b.title }}</a>{% else %}{{ b.title }}{% endif %}</h3>
+    <p class="muted">{{ b.author }}</p>
+    {% if b.status == "reading" %}<div class="bar"><span style="width:{{ b.progress }}%"></span></div><p class="small muted">{{ b.progress }}%</p>{% endif %}
+    {% if b.rating %}<p class="stars" aria-label="{{ b.rating }} of 5">{% for i in "12345" %}{% if forloop.counter <= b.rating %}★{% else %}☆{% endif %}{% endfor %}</p>{% endif %}
+    {% if b.finished_on %}<p class="small muted">Finished {{ b.finished_on }}</p>{% endif %}
+    {% if b.notes %}<details><summary>My notes</summary>{{ b.notes|paragraphs }}</details>{% endif %}
+  </div>
+</article>

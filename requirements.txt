@@ -1,0 +1,4 @@
+Django>=5.2
+Pillow>=11
+whitenoise>=6.9
+gunicorn>=23   # production only (Linux)

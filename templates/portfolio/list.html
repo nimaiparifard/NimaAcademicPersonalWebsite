@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Projects – {{ profile.name }}{% endblock %}
+{% block content %}
+<div class="wrap page">
+  <header class="page-head"><h1>Projects</h1>
+    <p class="lead">Research prototypes and production-style systems.</p></header>
+  {% if categories %}
+  <div class="filters" data-filters>
+    <button class="chip on" data-cat="">All</button>
+    {% for c in categories %}<button class="chip" data-cat="{{ c }}">{{ c }}</button>{% endfor %}
+  </div>
+  {% endif %}
+  <div class="grid" data-grid>
+    {% for p in projects %}{% include "partials/project_card.html" %}{% empty %}<p class="muted">Projects coming soon.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

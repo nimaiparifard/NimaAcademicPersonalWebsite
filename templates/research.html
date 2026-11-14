@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Research – {{ profile.name }}{% endblock %}
+{% block content %}
+<div class="wrap page narrow">
+  <header class="page-head"><h1>Research</h1>
+    {% if profile.interests %}<ul class="interest">{% for i in profile.interests %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+  </header>
+
+  <h2 class="sec">Publications &amp; preprints</h2>
+  {% for pub in done %}{% include "partials/publication.html" %}{% empty %}<p class="muted">Nothing yet.</p>{% endfor %}
+
+  {% if writing %}
+  <h2 class="sec">Currently writing</h2>
+  <p class="muted">Work in progress, updated as it moves along.</p>
+  {% for pub in writing %}{% include "partials/publication.html" %}{% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

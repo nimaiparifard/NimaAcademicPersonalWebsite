@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block title %}About – {{ profile.name }}{% endblock %}
+{% block content %}
+<div class="wrap page">
+  <header class="page-head">
+    <h1>About</h1>
+    <p class="lead">{{ profile.headline }}</p>
+    <div class="cta">
+      {% if profile.cv_file %}<a class="btn primary" href="{{ profile.cv_file.url }}" download>Download CV ↓</a>{% endif %}
+      {% if profile.email %}<a class="btn" href="mailto:{{ profile.email }}">Contact</a>{% endif %}
+    </div>
+  </header>
+
+  {% if profile.long_bio %}<section class="prose">{{ profile.long_bio|paragraphs }}</section>{% endif %}
+
+  <h2 class="sec">Education</h2>
+  <div class="timeline">
+    {% for e in education %}
+    <div class="tl-item">
+      <div class="tl-when">{{ e.period }}</div>
+      <div class="tl-what">
+        <h3>{{ e.degree }}</h3>
+        <p class="org">{{ e.institution }}{% if e.location %}, {{ e.location }}{% endif %}</p>
+        {% if e.gpa %}<p class="small">GPA: {{ e.gpa }}</p>{% endif %}
+        {% if e.supervisor %}<p class="small">Supervisor: {{ e.supervisor }}</p>{% endif %}
+        {% if e.thesis %}<p class="small"><em>Thesis:</em> {{ e.thesis }}</p>{% endif %}
+        {{ e.notes|bullets }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="sec">Experience</h2>
+  <div class="timeline">
+    {% for e in work %}
+    <div class="tl-item">
+      <div class="tl-when">{{ e.period }}</div>
+      <div class="tl-what">
+        <h3>{{ e.title }}</h3>
+        <p class="org">{{ e.organization }}{% if e.location %}, {{ e.location }}{% endif %} <span class="chip">{{ e.get_kind_display }}</span></p>
+        {{ e.description|bullets }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if teaching %}
+  <h2 class="sec">Teaching</h2>
+  <div class="timeline">
+    {% for e in teaching %}
+    <div class="tl-item">
+      <div class="tl-when">{{ e.period }}</div>
+      <div class="tl-what"><h3>{{ e.title }}</h3><p class="org">{{ e.organization }}</p>{{ e.description|bullets }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if skills %}
+  <h2 class="sec">Skills</h2>
+  <div class="skills">
+    {% for g in skills %}
+    <div class="skill-group"><h3>{{ g.name }}</h3>
+      <div class="tags">{% for s in g.skills|csv %}<span>{{ s }}</span>{% endfor %}</div></div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if awards %}
+  <h2 class="sec">Awards &amp; distinctions</h2>
+  <ul class="awards">{% for a in awards %}<li><strong>{{ a.title }}</strong>{% if a.issuer %} — {{ a.issuer }}{% endif %}{% if a.year %} <span class="muted">({{ a.year }})</span>{% endif %}</li>{% endfor %}</ul>
+  {% endif %}
+</div>
+{% endblock %}

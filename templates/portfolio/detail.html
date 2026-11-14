@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block title %}{{ project.title }} – {{ profile.name }}{% endblock %}
+{% block description %}{{ project.summary }}{% endblock %}
+{% block ogtitle %}{{ project.title }}{% endblock %}
+{% block content %}
+<article class="wrap page narrow">
+  <a class="back" href="{% url 'project_list' %}">← All projects</a>
+  <header class="page-head">
+    <div class="meta">
+      {% if project.category %}<span class="chip accent">{{ project.category }}</span>{% endif %}
+      <span class="chip status-{{ project.status }}">{{ project.get_status_display }}</span>
+      {% if project.year %}<span class="muted">{{ project.year }}</span>{% endif %}
+    </div>
+    <h1>{{ project.title }}</h1>
+    <p class="lead">{{ project.summary }}</p>
+    <div class="cta">
+      {% if project.demo_url %}<a class="btn primary" href="{{ project.demo_url }}" rel="noopener">Live demo ↗</a>{% endif %}
+      {% if project.repo_url %}<a class="btn" href="{{ project.repo_url }}" rel="noopener">Code ↗</a>{% endif %}
+      {% if project.paper_url %}<a class="btn" href="{{ project.paper_url }}" rel="noopener">Write-up ↗</a>{% endif %}
+    </div>
+  </header>
+
+  {% with m=project.metrics|metrics %}{% if m %}
+  <div class="metrics">{% for k, v in m %}<div><b>{{ v }}</b><span>{{ k }}</span></div>{% endfor %}</div>
+  {% endif %}{% endwith %}
+
+  {% if project.cover and not project.media.all %}
+  <figure class="shot">{% picture project.cover project.title "(max-width: 900px) 100vw, 860px" "" True %}</figure>
+  {% endif %}
+
+  <section class="prose">
+    {{ project.description|paragraphs }}
+    {{ project.highlights|bullets }}
+  </section>
+
+  {% if project.media.all %}
+  <h2 class="sec">Gallery &amp; demo</h2>
+  <div class="gallery">
+    {% for m in project.media.all %}
+    <figure class="shot">
+      {% if m.kind == "image" %}
+        {% picture m.image m.caption "(max-width: 900px) 100vw, 860px" %}
+      {% elif m.kind == "video" %}
+        {# preload=none: the video file is only fetched when the visitor presses play #}
+        <video controls preload="none" playsinline {% if m.image %}poster="{{ m.image.url }}"{% endif %}>
+          <source src="{{ m.video.url }}">
+        </video>
+      {% else %}
+        {# click-to-load: no heavy third-party iframe until the visitor asks for it #}
+        <div class="embed" data-embed="{{ m.embed_src }}" {% if m.embed_poster %}style="background-image:url('{{ m.embed_poster }}')"{% endif %}>
+          <button aria-label="Play video">▶</button>
+        </div>
+      {% endif %}
+      {% if m.caption %}<figcaption>{{ m.caption }}</figcaption>{% endif %}
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if project.tech %}
+  <h2 class="sec">Tech</h2>
+  <div class="tags big">{% for t in project.tech|csv %}<span>{{ t }}</span>{% endfor %}</div>
+  {% endif %}
+</article>
+{% endblock %}

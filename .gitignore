@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+db.sqlite3
+.cache/
+staticfiles/
+.env
+venv/
+.venv/
+# uploaded media is user content, back it up separately
+media/
+dist/

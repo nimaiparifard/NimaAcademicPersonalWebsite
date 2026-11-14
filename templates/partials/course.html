@@ -1,0 +1,13 @@
+{% load site_extras %}
+<article class="card course">
+  <div class="card-body">
+    <div class="meta"><span class="chip {% if c.status == 'done' %}status-done{% else %}status-active{% endif %}">{{ c.get_status_display }}</span>
+      {% if c.completed_on %}<span class="muted small">{{ c.completed_on }}</span>{% endif %}</div>
+    <h3>{% if c.url %}<a href="{{ c.url }}" rel="noopener">{{ c.title }}</a>{% else %}{{ c.title }}{% endif %}</h3>
+    <p class="muted">{{ c.provider }}{% if c.instructor %} · {{ c.instructor }}{% endif %}</p>
+    {% if c.status == "progress" %}<div class="bar"><span style="width:{{ c.progress }}%"></span></div>{% endif %}
+    {% if c.notes %}<p class="small">{{ c.notes }}</p>{% endif %}
+    <div class="tags">{% for s in c.skills|csv %}<span>{{ s }}</span>{% endfor %}</div>
+    {% if c.certificate %}<p class="links-row"><a href="{{ c.certificate.url }}">Certificate ↗</a></p>{% endif %}
+  </div>
+</article>

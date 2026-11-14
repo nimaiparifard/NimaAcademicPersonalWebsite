@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block title %}Learning – {{ profile.name }}{% endblock %}
+{% block content %}
+<div class="wrap page">
+  <header class="page-head"><h1>Learning</h1>
+    <p class="lead">Books I read and courses I take, with notes.</p></header>
+
+  {% if reading %}<h2 class="sec">Reading now</h2>
+  <div class="books">{% for b in reading %}{% include "partials/book.html" %}{% endfor %}</div>{% endif %}
+
+  {% if courses_now %}<h2 class="sec">Courses in progress</h2>
+  <div class="grid">{% for c in courses_now %}{% include "partials/course.html" %}{% endfor %}</div>{% endif %}
+
+  <h2 class="sec">Finished books</h2>
+  <div class="books">{% for b in finished %}{% include "partials/book.html" %}{% empty %}<p class="muted">Nothing here yet.</p>{% endfor %}</div>
+
+  <h2 class="sec">Completed courses &amp; certificates</h2>
+  <div class="grid">{% for c in courses_done %}{% include "partials/course.html" %}{% empty %}<p class="muted">Nothing here yet.</p>{% endfor %}</div>
+
+  {% if want %}<h2 class="sec">Reading list</h2>
+  <div class="books">{% for b in want %}{% include "partials/book.html" %}{% endfor %}</div>{% endif %}
+</div>
+{% endblock %}

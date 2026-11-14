@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block title %}{{ item.title }} – {{ profile.name }}{% endblock %}
+{% block description %}{{ item.summary }}{% endblock %}
+{% block content %}
+<article class="wrap page narrow">
+  <a class="back" href="{% url 'news_list' %}">← All news</a>
+  <header class="page-head"><p class="muted">{{ item.date|date:"F j, Y" }}</p><h1>{{ item.title }}</h1><p class="lead">{{ item.summary }}</p></header>
+  {% if item.image %}<figure class="shot">{% picture item.image item.title "(max-width: 900px) 100vw, 860px" "" True %}</figure>{% endif %}
+  <section class="prose">{{ item.body|paragraphs }}</section>
+  {% if item.link %}<p><a class="btn" href="{{ item.link }}" rel="noopener">Read more ↗</a></p>{% endif %}
+</article>
+{% endblock %}

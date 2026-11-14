@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}News – {{ profile.name }}{% endblock %}
+{% block content %}
+<div class="wrap page narrow">
+  <header class="page-head"><h1>News</h1><p class="lead">What I'm up to.</p></header>
+  <ul class="newslist">
+    {% for n in items %}
+    <li><time datetime="{{ n.date|date:'Y-m-d' }}">{{ n.date|date:"M Y" }}</time>
+      <div><a href="{{ n.get_absolute_url }}">{{ n.title }}</a>{% if n.pinned %} <span class="chip accent">pinned</span>{% endif %}
+      <p>{{ n.summary }}</p></div></li>
+    {% empty %}<li class="muted">No news yet.</li>{% endfor %}
+  </ul>
+</div>
+{% endblock %}
